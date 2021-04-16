@@ -68,7 +68,7 @@ namespace Slutprojekt
                     Raylib.DrawTexture(walter2, 455, 540, Color.WHITE);
                 }
 
-
+                //TEST
 
                 //Console.WriteLine("Y: " + directionY);
                 //Console.WriteLine("X: " + directionX);
