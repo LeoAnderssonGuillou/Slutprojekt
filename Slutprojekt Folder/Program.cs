@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Raylib_cs;
+using System.Numerics;
 
 namespace Slutprojekt
 {
@@ -13,12 +14,10 @@ namespace Slutprojekt
 
             //List of bullets
             List<Bullet> bullets = new List<Bullet>();
-            // bullets.Add(new Bullet(500, 780, 1, 1));
-            // bullets.Add(new Bullet(600, 600, 1, 1));
 
             //Aiming
-            float directionX = 0;
-            float directionY = 90;
+            Vector2 direction = new Vector2(0, 0);
+            float aimAngle = 0;
 
             while (!Raylib.WindowShouldClose())
             {
@@ -28,50 +27,26 @@ namespace Slutprojekt
                 Texture2D walter = Raylib.LoadTexture("walter.png");
                 Texture2D walter2 = Raylib.LoadTexture("walter2.png");
 
-                //Draw and move bullets
-                foreach (Bullet shot in bullets)
-                {
-                    //Raylib.DrawTexture(walter, (int)shot.x, (int)shot.y, Color.WHITE);
-                    Raylib.DrawCircle((int)shot.x, (int)shot.y, 20, Color.RED);
-                    shot.x += shot.xSpeed / 10;
-                    shot.y -= shot.ySpeed / 10;
-                }
 
+                //Draw and move bullets
+                HandleBullets(bullets);
 
                 //Aim with arrow keys
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT) && directionX < 90)
-                {
-                    directionX += 3;
-                }
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && directionX > -90)
-                {
-                    directionX -= 3;
-                }
-                directionY = 90 - directionX * directionX / 90;
+                aimAngle = Aim(aimAngle, direction.X, direction.Y);
+
+                //Translate aimAngle to x and y values for bullet starting position and speed
+                direction = AngleToDirection(direction, aimAngle);
 
 
                 //Draw aiming indicator
-                int aimX = (int)(500 + directionX);
-                int aimY = (int)(600 - directionY);
+                int aimX = (int)(500 + direction.X);
+                int aimY = (int)(750 - direction.Y);
                 Raylib.DrawCircle(aimX, aimY, 20, Color.BLACK);
-                Raylib.DrawTexture(walter, 455, 540, Color.WHITE);
-
-
-                // Raylib.DrawCircle((int)(500 + directionX / 2), (int)(600 - directionY / 2), 20, Color.BLACK);
-                // Raylib.DrawCircle((int)(500), (int)(600), 20, Color.BLACK);
+                Raylib.DrawTexture(walter, 455, 690, Color.WHITE);
 
 
                 //Shoot bullet
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
-                {
-                    bullets.Add(new Bullet(aimX, aimY, directionX, directionY));
-                    Raylib.DrawTexture(walter2, 455, 540, Color.WHITE);
-                }
-
-                //TEST
-
-                //Console.WriteLine("Y: " + directionY);
-                //Console.WriteLine("X: " + directionX);
+                ShootBullet(bullets, direction, aimX, aimY, walter2);
 
 
                 Raylib.EndDrawing();
@@ -80,5 +55,49 @@ namespace Slutprojekt
 
 
         }
+
+        //Draw and move bullets
+        static void HandleBullets(List<Bullet> bulletList)
+        {
+            foreach (Bullet shot in bulletList)
+                {
+                    Raylib.DrawCircle((int)shot.pos.X, (int)shot.pos.Y, 15, Color.RED);
+                    shot.pos.X += shot.xSpeed / 10;
+                    shot.pos.Y -= shot.ySpeed / 10;
+                }
+        }
+
+        //Aim with arrow keys
+        static float Aim(float angle, float direcX, float direcY)
+        {
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT) && direcX < 90)
+                {
+                    angle += 3;
+                }
+                if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && direcX > -90)
+                {
+                    angle -= 3;
+                }
+                return angle;
+        }
+
+        //Translate aimAngle to x and y values for bullet starting position and speed
+        static Vector2 AngleToDirection(Vector2 direc, float angle)
+        {
+            direc.X = MathF.Sin(angle * MathF.PI / 180) * 90;
+            direc.Y = MathF.Cos(angle * MathF.PI / 180) * 90;
+            return direc;
+        }
+
+        //Create new bullet and draw character shooting
+        static void ShootBullet(List<Bullet> bulletList, Vector2 direc, float aimx, float aimy, Texture2D character)
+        {
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
+                {
+                    bulletList.Add(new Bullet(aimx, aimy, direc.X, direc.Y));
+                    Raylib.DrawTexture(character, 455, 690, Color.WHITE);
+                }
+        }
+
     }
 }
