@@ -12,12 +12,15 @@ namespace Slutprojekt
             Raylib.InitWindow(1000, 800, "Slutprojekt");
             Raylib.SetTargetFPS(60);
 
-            //List of bullets
+            //Lists of objects
             List<Bullet> bullets = new List<Bullet>();
+            List<Obstacle> obstacles = new List<Obstacle>();
 
-            //Aiming
+            //Aiming variables
             Vector2 direction = new Vector2(0, 0);
             float aimAngle = 0;
+
+            obstacles.Add(new Obstacle(500, 50, 1, 10));
 
             while (!Raylib.WindowShouldClose())
             {
@@ -29,7 +32,7 @@ namespace Slutprojekt
 
 
                 //Draw and move bullets
-                HandleBullets(bullets);
+                HandleObjects(bullets, obstacles);
 
                 //Aim with arrow keys
                 aimAngle = Aim(aimAngle, direction.X, direction.Y);
@@ -37,16 +40,11 @@ namespace Slutprojekt
                 //Translate aimAngle to x and y values for bullet starting position and speed
                 direction = AngleToDirection(direction, aimAngle);
 
-
                 //Draw aiming indicator
-                int aimX = (int)(500 + direction.X);
-                int aimY = (int)(750 - direction.Y);
-                Raylib.DrawCircle(aimX, aimY, 20, Color.BLACK);
-                Raylib.DrawTexture(walter, 455, 690, Color.WHITE);
-
+                AimIndicator(direction, walter);
 
                 //Shoot bullet
-                ShootBullet(bullets, direction, aimX, aimY, walter2);
+                ShootBullet(bullets, direction, walter2);
 
 
                 Raylib.EndDrawing();
@@ -57,13 +55,20 @@ namespace Slutprojekt
         }
 
         //Draw and move bullets
-        static void HandleBullets(List<Bullet> bulletList)
+        static void HandleObjects(List<Bullet> bulletList, List<Obstacle> obstacleList)
         {
             foreach (Bullet shot in bulletList)
                 {
                     Raylib.DrawCircle((int)shot.pos.X, (int)shot.pos.Y, 15, Color.RED);
                     shot.pos.X += shot.xSpeed / 10;
                     shot.pos.Y -= shot.ySpeed / 10;
+                }
+            
+            foreach (Obstacle enemy in obstacleList)
+                {
+                    Raylib.DrawCircle((int)enemy.pos.X, (int)enemy.pos.Y, 15, Color.RED);
+                    enemy.pos.X += enemy.xSpeed;
+                    enemy.pos.Y += enemy.ySpeed;
                 }
         }
 
@@ -89,12 +94,23 @@ namespace Slutprojekt
             return direc;
         }
 
+        //Draw aiming indicator and character
+        static void AimIndicator(Vector2 direc, Texture2D character)
+        {
+            int aimX = (int)(500 + direc.X);
+            int aimY = (int)(750 - direc.Y);
+            Raylib.DrawCircle(aimX, aimY, 20, Color.BLACK);
+            Raylib.DrawTexture(character, 455, 690, Color.WHITE);
+        }
+
         //Create new bullet and draw character shooting
-        static void ShootBullet(List<Bullet> bulletList, Vector2 direc, float aimx, float aimy, Texture2D character)
+        static void ShootBullet(List<Bullet> bulletList, Vector2 direc, Texture2D character)
         {
             if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
                 {
-                    bulletList.Add(new Bullet(aimx, aimy, direc.X, direc.Y));
+                    int aimX = (int)(500 + direc.X);
+                    int aimY = (int)(750 - direc.Y);
+                    bulletList.Add(new Bullet(aimX, aimY, direc.X, direc.Y));
                     Raylib.DrawTexture(character, 455, 690, Color.WHITE);
                 }
         }
