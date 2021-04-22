@@ -69,10 +69,9 @@ namespace Slutprojekt
             if (cool == 0)
             {
                 Random rand = new Random();
-                int x = rand.Next(0, 1001);
-                int xSpeed = rand.Next(10, 31)/10;
-                int ySpeed = rand.Next(10, 31)/10;
-                enemys.Add(new Obstacle(x, 0, xSpeed, ySpeed, 5));
+                int x = rand.Next(0, 960);
+                int xSpeed = rand.Next(1, 4);
+                enemys.Add(new Obstacle(x, 0, xSpeed, 2, 5));
                 cool = 100;
             }
             cool--;
@@ -113,11 +112,17 @@ namespace Slutprojekt
                             }
                         }
 
-                    //Make obstacle less red, if red less than 0, make red 0
+                    //Make obstacle less red by increasing green and blue. If more green/blue than 255, make it 255.
                     enemy.red += 15;
                     if (enemy.red > 255)
                     {
                         enemy.red = 255;
+                    }
+
+                    //Make obstacle bounce at borders
+                    if (enemy.pos.X > 940 || enemy.pos.X < 0)
+                    {
+                        enemy.xSpeed = -enemy.xSpeed;
                     }
 
                     //Remove obstacle if its HP is 0
