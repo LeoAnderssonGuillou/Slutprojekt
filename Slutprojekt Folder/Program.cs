@@ -23,10 +23,10 @@ namespace Slutprojekt
 
             //Cooldown variables
             int shootCool = 0;
+            int spawnCool = 0;
 
-            obstacles.Add(new Obstacle(0, 0, 1, 2, 10));
-            obstacles.Add(new Obstacle(500, 0, 0, 2, 10));
-            obstacles.Add(new Obstacle(1000, 0, -1, 2, 10));
+            //Random
+            Random random = new Random();
 
             while (!Raylib.WindowShouldClose())
             {
@@ -36,6 +36,9 @@ namespace Slutprojekt
                 Texture2D walter = Raylib.LoadTexture("walter.png");
                 Texture2D walter2 = Raylib.LoadTexture("walter2.png");
 
+
+                //Spawns obstacles
+                spawnCool = Spawn(spawnCool, obstacles);
 
                 //Draw and move objetcs
                 HandleObjects(bullets, obstacles);
@@ -60,7 +63,21 @@ namespace Slutprojekt
 
         }
 
-
+        //Spawn obstacles
+        static int Spawn(int cool, List<Obstacle> enemys)
+        {
+            if (cool == 0)
+            {
+                Random rand = new Random();
+                int x = rand.Next(0, 1001);
+                int xSpeed = rand.Next(10, 31)/10;
+                int ySpeed = rand.Next(10, 31)/10;
+                enemys.Add(new Obstacle(x, 0, xSpeed, ySpeed, 5));
+                cool = 100;
+            }
+            cool--;
+            return cool;
+        }
 
         //Draw/move objects and handle collisions
         static void HandleObjects(List<Bullet> bulletList, List<Obstacle> obstacleList)
