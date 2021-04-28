@@ -28,6 +28,7 @@ namespace Slutprojekt
 
             //Miscellaneous
             Game game = new Game();
+            Color borderColor = Color.GREEN;
 
 
             while (!Raylib.WindowShouldClose())
@@ -36,7 +37,7 @@ namespace Slutprojekt
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
 
-                if (game.gameOver == false)
+                if (game.gameState == 0)
                 {
                     game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game.textState);     //Spawns obstacles
                     HandleObjects(bullets, obstacles);                                                      //Draw and move objetcs
@@ -45,9 +46,15 @@ namespace Slutprojekt
                     AimIndicator(direction, walter);                                                        //Draw aiming indicator
                     game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool);       //Shoot bullet
                     game.textState = Text.Instructions(game.textState);                                     //Give instructions
-                    game.gameOver = Obstacle.HasHitGround(obstacles);                                       //Check if player has lost
+                    game.gameState = Obstacle.HasHitGround(obstacles);                                      //Check if player has lost
                 }
-                else
+
+                else if (game.gameState == 1)
+                {
+                    Shop.SetupShop(borderColor);
+                }
+
+                else if (game.gameState == 2)
                 {
                     game = Text.GameOverScreen(bullets, obstacles, game);                                //Game over screen
                 }
@@ -99,13 +106,11 @@ namespace Slutprojekt
                     {
                         enemy.red = 255;
                     }
-
                     //Make obstacle bounce at borders
-                    if (enemy.pos.X > 880 || enemy.pos.X < 0)
+                    if (enemy.pos.X > 900 || enemy.pos.X < 0)
                     {
                         enemy.xSpeed = -enemy.xSpeed;
                     }
-
                     //Remove obstacle if its HP is 0
                     if (enemy.hp < 1)
                     {

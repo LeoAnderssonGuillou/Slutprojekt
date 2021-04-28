@@ -32,8 +32,8 @@ namespace Slutprojekt
             if (cool < 1 && state > 2)
             {
                 Random rand = new Random();
-                int x = rand.Next(0, 960);
-                int xSpeed = rand.Next(1, 4);
+                int x = rand.Next(0, 900);
+                int xSpeed = rand.Next(-3, 4);
                 enemys.Add(new Obstacle(x, 0, xSpeed, 2, 5, image));
                 cool = 100;
             }
@@ -42,14 +42,14 @@ namespace Slutprojekt
         }
 
         //Return true if any obstacle has hit the ground
-        public static bool HasHitGround(List<Obstacle> obstacleList)
+        public static int HasHitGround(List<Obstacle> obstacleList)
         {
-            bool gameover = false;
+            int gameover = 0;
             foreach (Obstacle enemy in obstacleList)
             {
                 if (enemy.pos.Y > 700)
                 {
-                    gameover = true;
+                    gameover = 2;
                 }
             }
             return gameover;
