@@ -32,7 +32,8 @@ namespace Slutprojekt
 
             //Miscellaneous
             Random random = new Random();
-            int gameState = 0;
+            int textState = 0;
+            bool gameOver = false;
 
 
             while (!Raylib.WindowShouldClose())
@@ -41,28 +42,22 @@ namespace Slutprojekt
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
 
-
-                //Spawns obstacles
-                spawnCool = Obstacle.Spawn(spawnCool, obstacles, floppa, gameState);
-
-                //Draw and move objetcs
-                HandleObjects(bullets, obstacles);
-
-                //Aim with arrow keys
-                aimAngle = Aim(aimAngle, direction.X, direction.Y);
-
-                //Translate aimAngle to x and y values for bullet starting position and speed
-                direction = AngleToDirection(direction, aimAngle);
-
-                //Draw aiming indicator
-                AimIndicator(direction, walter);
-
-                //Shoot bullet
-                shootCool = Bullet.ShootBullet(bullets, direction, walter2, shootCool);
-
-                //Give instructions
-                Text.Instructions(gameState);
-
+                if (gameOver == false)
+                {
+                    spawnCool = Obstacle.Spawn(spawnCool, obstacles, floppa, textState);        //Spawns obstacles
+                    HandleObjects(bullets, obstacles);                                          //Draw and move objetcs
+                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                         //Aim with arrow keys
+                    direction = AngleToDirection(direction, aimAngle);                          //Translate aimAngle to x and y values for bullet starting position and speed
+                    AimIndicator(direction, walter);                                            //Draw aiming indicator
+                    shootCool = Bullet.ShootBullet(bullets, direction, walter2, shootCool);     //Shoot bullet
+                    textState = Text.Instructions(textState);                                   //Give instructions
+                    gameOver = Obstacle.HasHitGround(obstacles);                                //Check if player has lost
+                }
+                else
+                {
+                    Text.CenteredText("GAME OVER", 1000, 64, 250, 0);
+                }
+                
 
                 Raylib.EndDrawing();
 

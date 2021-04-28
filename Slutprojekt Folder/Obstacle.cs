@@ -29,7 +29,7 @@ namespace Slutprojekt
         //Spawn obstacles
         public static int Spawn(int cool, List<Obstacle> enemys, Texture2D image, int state)
         {
-            if (cool == 0 && state > 4)
+            if (cool < 1 && state > 2)
             {
                 Random rand = new Random();
                 int x = rand.Next(0, 960);
@@ -39,6 +39,20 @@ namespace Slutprojekt
             }
             cool--;
             return cool;
+        }
+
+        //Return true if any obstacle has hit the ground
+        public static bool HasHitGround(List<Obstacle> obstacleList)
+        {
+            bool gameover = false;
+            foreach (Obstacle enemy in obstacleList)
+            {
+                if (enemy.pos.Y > 700)
+                {
+                    gameover = true;
+                }
+            }
+            return gameover;
         }
     }
 }
