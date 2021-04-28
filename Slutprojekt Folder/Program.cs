@@ -21,19 +21,13 @@ namespace Slutprojekt
             Vector2 direction = new Vector2(0, 0);
             float aimAngle = 0;
 
-            //Cooldown variables
-            int shootCool = 0;
-            int spawnCool = 0;
-
             //Textues
             Texture2D walter = Raylib.LoadTexture("walter.png");
             Texture2D walter2 = Raylib.LoadTexture("walter2.png");
             Texture2D floppa = Raylib.LoadTexture("floppa.png");
 
             //Miscellaneous
-            Random random = new Random();
-            int textState = 0;
-            bool gameOver = false;
+            Game game = new Game();
 
 
             while (!Raylib.WindowShouldClose())
@@ -42,27 +36,24 @@ namespace Slutprojekt
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
 
-                if (gameOver == false)
+                if (game.gameOver == false)
                 {
-                    spawnCool = Obstacle.Spawn(spawnCool, obstacles, floppa, textState);        //Spawns obstacles
-                    HandleObjects(bullets, obstacles);                                          //Draw and move objetcs
-                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                         //Aim with arrow keys
-                    direction = AngleToDirection(direction, aimAngle);                          //Translate aimAngle to x and y values for bullet starting position and speed
-                    AimIndicator(direction, walter);                                            //Draw aiming indicator
-                    shootCool = Bullet.ShootBullet(bullets, direction, walter2, shootCool);     //Shoot bullet
-                    textState = Text.Instructions(textState);                                   //Give instructions
-                    gameOver = Obstacle.HasHitGround(obstacles);                                //Check if player has lost
+                    game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game.textState);     //Spawns obstacles
+                    HandleObjects(bullets, obstacles);                                                      //Draw and move objetcs
+                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                     //Aim with arrow keys
+                    direction = AngleToDirection(direction, aimAngle);                                      //Translate aimAngle to x and y values for bullet starting position and speed
+                    AimIndicator(direction, walter);                                                        //Draw aiming indicator
+                    game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool);       //Shoot bullet
+                    game.textState = Text.Instructions(game.textState);                                     //Give instructions
+                    game.gameOver = Obstacle.HasHitGround(obstacles);                                       //Check if player has lost
                 }
                 else
                 {
-                    Text.CenteredText("GAME OVER", 1000, 64, 250, 0);
+                    game = Text.GameOverScreen(bullets, obstacles, game);                                //Game over screen
                 }
                 
-
                 Raylib.EndDrawing();
-
             }
-
 
         }
 
@@ -110,7 +101,7 @@ namespace Slutprojekt
                     }
 
                     //Make obstacle bounce at borders
-                    if (enemy.pos.X > 940 || enemy.pos.X < 0)
+                    if (enemy.pos.X > 880 || enemy.pos.X < 0)
                     {
                         enemy.xSpeed = -enemy.xSpeed;
                     }

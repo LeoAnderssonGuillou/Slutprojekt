@@ -21,7 +21,7 @@ namespace Slutprojekt
         //Create new bullet and draw character shooting (if space is pressed)
         public static int ShootBullet(List<Bullet> bulletList, Vector2 direc, Texture2D character, int cool)
         {
-            if (Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_UP) || Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
                 {
                     Raylib.DrawTexture(character, 455, 690, Color.WHITE);
                     if (cool < 1)

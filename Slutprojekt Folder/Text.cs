@@ -1,4 +1,6 @@
 using System;
+using System.Numerics;
+using System.Collections.Generic;
 using Raylib_cs;
 
 namespace Slutprojekt
@@ -32,7 +34,6 @@ namespace Slutprojekt
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
             {
                 state++;
-                Console.WriteLine(state);
             }
             return state;
         }
@@ -46,6 +47,21 @@ namespace Slutprojekt
         public static void PressEnter(int y)
         {
             Text.CenteredText("[PRESS ENTER]", 1000, 35, y, 0);
+        }
+
+        public static Game GameOverScreen(List<Bullet> bulletList, List<Obstacle> obstacleList, Game game)
+        {
+            Text.CenteredText("GAME OVER", 1000, 64, 250, 0);
+            Text.CenteredText("A FLOPPA HIT THE GROUND", 1000, 40, 350, 0);
+            Text.CenteredText("[PRESS ENTER TO PLAY AGAIN]", 1000, 25, 700, 0);
+
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+            {
+                game.ResetGame();
+                bulletList.Clear();
+                obstacleList.Clear();
+            }
+            return game;
         }
     }
 }
