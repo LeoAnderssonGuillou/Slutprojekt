@@ -19,7 +19,7 @@ namespace Slutprojekt
         }
 
         //Create new bullet and draw character shooting (if space is pressed)
-        public static int ShootBullet(List<Bullet> bulletList, Vector2 direc, Texture2D character, int cool)
+        public static int ShootBullet(List<Bullet> bulletList, Vector2 direc, Texture2D character, int cool, int reload)
         {
             if (Raylib.IsKeyDown(KeyboardKey.KEY_UP) || Raylib.IsKeyDown(KeyboardKey.KEY_SPACE))
                 {
@@ -29,7 +29,7 @@ namespace Slutprojekt
                         int aimX = (int)(500 + direc.X);
                         int aimY = (int)(750 - direc.Y);
                         bulletList.Add(new Bullet(aimX, aimY, direc.X, direc.Y));
-                        cool = 4;
+                        cool = reload;
                     }
                 }
                 cool--;

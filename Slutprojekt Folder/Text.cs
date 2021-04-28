@@ -8,6 +8,7 @@ namespace Slutprojekt
     public class Text
     {
 
+        //Writes out player instructions in the beginning of the game
         public static int Instructions(int state)
         {
             switch (state)
@@ -31,6 +32,7 @@ namespace Slutprojekt
                     break;
             }
 
+            //Moves on to the next instruction if enter is pressed
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
             {
                 state++;
@@ -38,17 +40,19 @@ namespace Slutprojekt
             return state;
         }
 
-
+        //Method for easily writing out centered text within a given box (centered on x-axis only)
         public static void CenteredText(string text, int fullWidth, int fontSize, int yPos, int xStart)
         {
             Raylib.DrawText(text, xStart + (fullWidth - Raylib.MeasureText(text, fontSize)) / 2, yPos, fontSize, Color.BLACK);
         }
 
+        //Writes out the [PRESS ENTER] instruction
         public static void PressEnter(int y)
         {
             Text.CenteredText("[PRESS ENTER]", 1000, 35, y, 0);
         }
 
+        //Shows the game over screen and restarts the game if enter is pressed
         public static Game GameOverScreen(List<Bullet> bulletList, List<Obstacle> obstacleList, Game game)
         {
             Text.CenteredText("GAME OVER", 1000, 64, 250, 0);

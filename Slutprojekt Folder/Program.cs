@@ -28,7 +28,8 @@ namespace Slutprojekt
 
             //Miscellaneous
             Game game = new Game();
-            Color borderColor = Color.GREEN;
+            Gun gun = new Gun();
+            Color borderColor = Color.RED;
 
 
             while (!Raylib.WindowShouldClose())
@@ -39,19 +40,24 @@ namespace Slutprojekt
 
                 if (game.gameState == 0)
                 {
-                    game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game.textState);     //Spawns obstacles
-                    HandleObjects(bullets, obstacles);                                                      //Draw and move objetcs
-                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                     //Aim with arrow keys
-                    direction = AngleToDirection(direction, aimAngle);                                      //Translate aimAngle to x and y values for bullet starting position and speed
-                    AimIndicator(direction, walter);                                                        //Draw aiming indicator
-                    game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool);       //Shoot bullet
-                    game.textState = Text.Instructions(game.textState);                                     //Give instructions
-                    game.gameState = Obstacle.HasHitGround(obstacles);                                      //Check if player has lost
+                    game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game.textState);             //Spawns obstacles
+                    HandleObjects(bullets, obstacles, game);                                                        //Draw and move objetcs
+                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                             //Aim with arrow keys
+                    direction = AngleToDirection(direction, aimAngle);                                              //Translate aimAngle to x and y values for bullet starting position and speed
+                    AimIndicator(direction, walter);                                                                //Draw aiming indicator
+                    game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool, gun.reload);   //Shoot bullet
+                    game.textState = Text.Instructions(game.textState);                                             //Give instructions
+                    game.gameState = Obstacle.HasHitGround(obstacles);                                              //Check if player has lost
+                    Game.ShowMoney(game.money);
+                    Shop.ToggleShop(game);
                 }
 
                 else if (game.gameState == 1)
                 {
-                    Shop.SetupShop(borderColor);
+                    Shop.SetupShop(borderColor, game.money);
+                    Game.ShowMoney(game.money);
+                    Shop.BuyStuff(game, gun);
+                    Shop.ToggleShop(game);
                 }
 
                 else if (game.gameState == 2)
@@ -66,7 +72,7 @@ namespace Slutprojekt
 
 
         //Draw/move objects and handle collisions
-        static void HandleObjects(List<Bullet> bulletList, List<Obstacle> obstacleList)
+        static void HandleObjects(List<Bullet> bulletList, List<Obstacle> obstacleList, Game game)
         {
             //Draw/move bullets
             foreach (Bullet shot in bulletList)
@@ -115,6 +121,7 @@ namespace Slutprojekt
                     if (enemy.hp < 1)
                     {
                         obstacleList.Remove(enemy);
+                        game.money += 100;
                     }
                 }
         }
