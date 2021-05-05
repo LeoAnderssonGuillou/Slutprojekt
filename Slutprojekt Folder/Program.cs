@@ -86,7 +86,7 @@ namespace Slutprojekt
                 }
             
             //Draw/move obstacles and check all possible collisions
-            //To remove objects from these lists using loops, it is required to go through a for-loop in reverse
+            //To remove objects from these lists using loops, it is required to go through for-loops in reverse
             for (int i = obstacleList.Count - 1; i >= 0; i--)
                 {
                     Obstacle enemy = obstacleList[i];
