@@ -47,13 +47,13 @@ namespace Slutprojekt
             }
         }
 
-        public static void BuyStuff(Game game, Gun gun)
+        public static void BuyStuff(Game game)
         {
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_ONE) && game.money >= 500)
             {
                 game.money -= game.upgradeCost;
                 game.timesUpgraded++;
-                gun.reload -= 1;
+                game.reload -= 1;
             }
         }
     }

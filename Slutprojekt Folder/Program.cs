@@ -28,7 +28,6 @@ namespace Slutprojekt
 
             //Miscellaneous
             Game game = new Game();
-            Gun gun = new Gun();
             Color borderColor = Color.RED;
 
 
@@ -41,17 +40,17 @@ namespace Slutprojekt
                 //Standard gameplay mode
                 if (game.gameState == 0)
                 {
-                    game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game.textState);             //Spawns obstacles
-                    HandleObjects(bullets, obstacles, game);                                                        //Draw and move objetcs
-                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                             //Aim with arrow keys?
-                    direction = AngleToDirection(direction, aimAngle);                                              //Translate aimAngle to x and y values for bullet starting position and speed
-                    AimIndicator(direction, walter);                                                                //Draw aiming indicator
-                    game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool, gun.reload);   //Shoot bullet?
-                    game.textState = Text.Instructions(game.textState, game.money);                                 //Give instructions
-                    game.gameState = Obstacle.HasHitGround(obstacles);                                              //Check if player has lost
-                    Game.ShowMoney(game.money);                                                                     //Write out the players money
-                    Shop.ToggleShop(game);                                                                          //Enter shop?
-                    Game.Clock(game);                                                                               //Increase difficulty every interval
+                    game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game);                    //Spawns obstacles
+                    HandleObjects(bullets, obstacles, game);                                                     //Draw and move objetcs
+                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                          //Aim with arrow keys?
+                    direction = AngleToDirection(direction, aimAngle);                                           //Translate aimAngle to x and y values for bullet starting position and speed
+                    AimIndicator(direction, walter);                                                             //Draw aiming indicator
+                    Bullet.ShootBullet(bullets, direction, walter2, game);                                       //Shoot bullet?
+                    game.textState = Text.Instructions(game.textState, game.money);                              //Give instructions
+                    game.gameState = Obstacle.HasHitGround(obstacles);                                           //Check if player has lost
+                    Game.ShowMoney(game.money);                                                                  //Write out the players money
+                    Shop.ToggleShop(game);                                                                       //Enter shop?
+                    Game.Clock(game);                                                                            //Increase difficulty every interval
                 }
 
                 //Shop
@@ -59,8 +58,8 @@ namespace Slutprojekt
                 {
                     Shop.SetupShop(borderColor, game);        //Draw shop screen and buying options
                     Game.ShowMoney(game.money);
-                    Shop.BuyStuff(game, gun);                       //Buy upgrade on input and apply changes
-                    Shop.ToggleShop(game);                          //Exit shop?
+                    Shop.BuyStuff(game);                      //Buy upgrade on input and apply changes
+                    Shop.ToggleShop(game);                    //Exit shop?
                 }
 
                 //Game over screen
@@ -82,8 +81,8 @@ namespace Slutprojekt
             foreach (Bullet shot in bulletList)
                 {
                     Raylib.DrawCircle((int)shot.pos.X, (int)shot.pos.Y, 15, Color.GREEN);
-                    shot.pos.X += shot.xSpeed / 8;
-                    shot.pos.Y -= shot.ySpeed / 8;
+                    shot.pos.X += shot.xSpeed / 6;
+                    shot.pos.Y -= shot.ySpeed / 6;
                 }
             
             //Draw/move obstacles and check all possible collisions
@@ -135,11 +134,11 @@ namespace Slutprojekt
         {
             if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT) && direcX < 90)
                 {
-                    angle += 3;
+                    angle += 4;
                 }
                 if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT) && direcX > -90)
                 {
-                    angle -= 3;
+                    angle -= 4;
                 }
                 return angle;
         }

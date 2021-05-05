@@ -9,6 +9,7 @@ namespace Slutprojekt
         public int shootCool = 0;
         public int spawnCool = 0;
         public int money = 0;
+        public int reload = 8;
         public int upgradeCost = 0;
         public int timesUpgraded = 0;
         public int level = 0;
@@ -21,6 +22,7 @@ namespace Slutprojekt
             shootCool = 0;
             spawnCool = 0;
             money = 0;
+            reload = 8;
             timesUpgraded = 0;
             level = 0;
             levelCool = 60;

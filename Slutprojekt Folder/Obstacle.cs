@@ -27,15 +27,18 @@ namespace Slutprojekt
         }
 
         //Spawn obstacles
-        public static int Spawn(int cool, List<Obstacle> enemys, Texture2D image, int state)
+        public static int Spawn(int cool, List<Obstacle> enemys, Texture2D image, Game game)
         {
-            if (cool < 1 && state > 2)
+            if (cool < 1 && game.textState > 2)
             {
                 Random rand = new Random();
-                int x = rand.Next(0, 900);
-                int xSpeed = rand.Next(-3, 4);
-                enemys.Add(new Obstacle(x, 0, xSpeed, 2, 5, image));
-                cool = 150;
+                float harder = game.level / 30;
+                int xStart = rand.Next(0, 900);
+                float xSpeed = rand.Next(-3 - (int)harder, 4 + (int)harder);
+                float ySpeed = 2 + harder;
+
+                enemys.Add(new Obstacle(xStart, 0, xSpeed, ySpeed, 4, image));
+                cool = 150 - game.level * 2;
             }
             cool--;
             return cool;
@@ -47,7 +50,7 @@ namespace Slutprojekt
             int gameover = 0;
             foreach (Obstacle enemy in obstacleList)
             {
-                if (enemy.pos.Y > 700)
+                if (enemy.pos.Y > 750)
                 {
                     gameover = 2;
                 }
