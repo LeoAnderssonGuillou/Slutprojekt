@@ -29,7 +29,7 @@ namespace Slutprojekt
                     break;
                 //Wait for player to have $500, then tell them about the shop
                 case 3:
-                    if (money >= 100)
+                    if (money >= 500)
                     {
                         state = 4;
                     }

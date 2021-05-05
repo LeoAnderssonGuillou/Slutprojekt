@@ -32,12 +32,12 @@ namespace Slutprojekt
             if (cool < 1 && game.textState > 2)
             {
                 Random rand = new Random();
-                float harder = game.level / 30;
+                float harder = game.level / 40;
                 int xStart = rand.Next(0, 900);
                 float xSpeed = rand.Next(-3 - (int)harder, 4 + (int)harder);
                 float ySpeed = 2 + harder;
 
-                enemys.Add(new Obstacle(xStart, 0, xSpeed, ySpeed, 4, image));
+                enemys.Add(new Obstacle(xStart, 0, xSpeed, ySpeed, 3, image));
                 cool = 150 - game.level * 2;
             }
             cool--;
