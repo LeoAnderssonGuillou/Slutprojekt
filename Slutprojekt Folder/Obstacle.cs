@@ -35,7 +35,7 @@ namespace Slutprojekt
                 int x = rand.Next(0, 900);
                 int xSpeed = rand.Next(-3, 4);
                 enemys.Add(new Obstacle(x, 0, xSpeed, 2, 5, image));
-                cool = 100;
+                cool = 150;
             }
             cool--;
             return cool;

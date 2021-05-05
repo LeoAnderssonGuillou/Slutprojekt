@@ -9,7 +9,7 @@ namespace Slutprojekt
     {
 
         //Writes out player instructions in the beginning of the game
-        public static int Instructions(int state)
+        public static int Instructions(int state, int money)
         {
             switch (state)
             {
@@ -27,13 +27,24 @@ namespace Slutprojekt
                     Text.CenteredText("HITTING THE GROUND", 1000, 64, 250, 0);
                     Text.PressEnter(375);
                     break;
+                //Wait for player to have $500, then tell them about the shop
+                case 3:
+                    if (money >= 100)
+                    {
+                        state = 4;
+                    }
+                    break;
+                case 4:
+                    Text.CenteredText("USE DOWN ARROW KEY", 1000, 50, 250, 0);
+                    Text.CenteredText("TO ENTER SHOP", 1000, 50, 330, 0);
+                    break;
                 default:
                     
                     break;
             }
 
-            //Moves on to the next instruction if enter is pressed
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+            //Moves on to the next instruction if enter is pressed. Stops at state 3
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER) && state < 3)
             {
                 state++;
             }

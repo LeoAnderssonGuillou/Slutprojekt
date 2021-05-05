@@ -37,32 +37,36 @@ namespace Slutprojekt
                 //Setup frame
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
-
+                
+                //Standard gameplay mode
                 if (game.gameState == 0)
                 {
                     game.spawnCool = Obstacle.Spawn(game.spawnCool, obstacles, floppa, game.textState);             //Spawns obstacles
                     HandleObjects(bullets, obstacles, game);                                                        //Draw and move objetcs
-                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                             //Aim with arrow keys
+                    aimAngle = Aim(aimAngle, direction.X, direction.Y);                                             //Aim with arrow keys?
                     direction = AngleToDirection(direction, aimAngle);                                              //Translate aimAngle to x and y values for bullet starting position and speed
                     AimIndicator(direction, walter);                                                                //Draw aiming indicator
-                    game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool, gun.reload);   //Shoot bullet
-                    game.textState = Text.Instructions(game.textState);                                             //Give instructions
+                    game.shootCool = Bullet.ShootBullet(bullets, direction, walter2, game.shootCool, gun.reload);   //Shoot bullet?
+                    game.textState = Text.Instructions(game.textState, game.money);                                 //Give instructions
                     game.gameState = Obstacle.HasHitGround(obstacles);                                              //Check if player has lost
-                    Game.ShowMoney(game.money);
-                    Shop.ToggleShop(game);
+                    Game.ShowMoney(game.money);                                                                     //Write out the players money
+                    Shop.ToggleShop(game);                                                                          //Enter shop?
+                    Game.Clock(game);                                                                               //Increase difficulty every interval
                 }
 
+                //Shop
                 else if (game.gameState == 1)
                 {
-                    Shop.SetupShop(borderColor, game.money);
+                    Shop.SetupShop(borderColor, game);        //Draw shop screen and buying options
                     Game.ShowMoney(game.money);
-                    Shop.BuyStuff(game, gun);
-                    Shop.ToggleShop(game);
+                    Shop.BuyStuff(game, gun);                       //Buy upgrade on input and apply changes
+                    Shop.ToggleShop(game);                          //Exit shop?
                 }
 
+                //Game over screen
                 else if (game.gameState == 2)
                 {
-                    game = Text.GameOverScreen(bullets, obstacles, game);                                //Game over screen
+                    game = Text.GameOverScreen(bullets, obstacles, game);
                 }
                 
                 Raylib.EndDrawing();
