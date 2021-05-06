@@ -49,7 +49,7 @@ namespace Slutprojekt
 
         public static void BuyStuff(Game game)
         {
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ONE) && game.money >= 500)
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ONE) && game.money >= game.upgradeCost)
             {
                 game.money -= game.upgradeCost;
                 game.timesUpgraded++;
